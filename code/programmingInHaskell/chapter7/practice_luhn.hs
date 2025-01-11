@@ -1,3 +1,11 @@
+-- 9. 関数altMap :: (a -> b) -> (a -> b) -> [a] -> [b] を定義してください。
+-- - この関数は、引数で指定された二つの関数をリストの要素に交互に適用します。
+-- 以下に使用例を示します。
+-- > altMap (+10) (+100) [0,1,2,3,4]
+-- [10,101,12,103,14]
+altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
+altMap f1 f2 xs = map ((\(x, i) -> ([f1, f2] !! (i `mod` 2)) $ x)) (zip xs [0 ..])
+
 -- Luhn アルゴリズムは、銀行のカード番号に対して単純な入力間違いを検出する方法であり、以下のように実行されます。
 -- - それぞれを独立した番号だとみなす
 -- - 右から数えて偶数番めの数すべてを二倍にする
@@ -16,3 +24,8 @@ luhn a b c d = (luhnDouble a + b + luhnDouble c + d) `mod` 10 == 0
 -- 10. 第4章の練習問題に出てきたLuhnアルゴリズムを実装する関数を、任意の長さのカード番号を取り扱えるように改良してください。
 -- - altMapを用いて関数luhn :: [Int] -> Bool を定義してください。
 -- - 自分の銀行のカード番号を使ってテストしましょう。
+
+luhn' :: [Int] -> Bool
+luhn' ns = sum (altMap firstFn secondFn ns) `mod` 10 == 0
+  where
+    (firstFn, secondFn) = if odd $ length ns then (id, luhnDouble) else (luhnDouble, id)

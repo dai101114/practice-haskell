@@ -75,11 +75,3 @@ map'' f = unfold (== []) (f . head) tail
 
 iterate' :: (a -> a) -> a -> [a]
 iterate' f = unfold (\_ -> False) id f
-
--- 9. 関数altMap :: (a -> b) -> (a -> b) -> [a] -> [b] を定義してください。
--- - この関数は、引数で指定された二つの関数をリストの要素に交互に適用します。
--- 以下に使用例を示します。
--- > altMap (+10) (+100) [0,1,2,3,4]
--- [10,101,12,103,14]
-altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
-altMap f1 f2 xs = map ((\(x, i) -> ([f1, f2] !! (i `mod` 2)) $ x)) (zip xs [0 ..])

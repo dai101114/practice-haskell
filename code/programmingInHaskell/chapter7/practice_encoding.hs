@@ -13,7 +13,7 @@ int2bin :: Int -> [Bit]
 int2bin 0 = []
 int2bin n = n `mod` 2 : int2bin (n `div` 2)
 
--- 復号化関数
+-- 復号関数
 decode :: [Bit] -> String
 decode = map (chr . bin2int) . chop8
 
@@ -39,3 +39,37 @@ channel = id
 
 -- 8. 通信エラーの生じる通信路を用いて、直前の問題で定義した文字列を通信するプログラムを試してください。
 -- - この通信路は最初のビットを落とすものとします（関数tailをビットのリストに適用することで実現できます）。
+
+-- 符号化関数
+encode' :: String -> [Bit]
+encode' = concat . map (withParityBit . make8 . int2bin . ord)
+
+withParityBit :: [Bit] -> [Bit]
+withParityBit bits
+  | odd count1 = 1 : bits
+  | otherwise = 0 : bits
+  where
+    count1 = length (filter (== 1) bits)
+
+-- 復号関数
+decode' :: [Bit] -> String
+decode' = map (chr . bin2int . verifyParityBit) . chop9
+
+chop9 :: [Bit] -> [[Bit]]
+chop9 [] = []
+chop9 bits = take 9 bits : chop9 (drop 9 bits)
+
+verifyParityBit :: [Bit] -> [Bit]
+verifyParityBit bits
+  | parityBit == 1 && odd count1 || parityBit == 0 && even count1 = tail bits
+  | otherwise = error "invalid bits"
+  where
+    parityBit = head bits
+    count1 = length (filter (== 1) (tail bits))
+
+-- 通信
+transmit' :: String -> String
+transmit' = decode' . channel' . encode'
+
+channel' :: [Bit] -> [Bit]
+channel' bits = tail bits
