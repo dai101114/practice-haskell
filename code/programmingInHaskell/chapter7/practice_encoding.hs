@@ -11,14 +11,14 @@ make8 bits = take 8 (bits ++ repeat 0)
 
 int2bin :: Int -> [Bit]
 int2bin 0 = []
-int2bin n = n` mod` 2 : int2bin (n` div` 2)
+int2bin n = n `mod` 2 : int2bin (n `div` 2)
 
 -- 復号化関数
 decode :: [Bit] -> String
 decode = map (chr . bin2int) . chop8
 
 bin2int :: [Bit] -> Int
-bin2int = foldr (\x y -> x + 2*y) 0
+bin2int = foldr (\x y -> x + 2 * y) 0
 
 chop8 :: [Bit] -> [[Bit]]
 chop8 [] = []

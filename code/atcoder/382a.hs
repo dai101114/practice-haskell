@@ -1,12 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
+
 import qualified Data.Text as T
 
 main :: IO ()
 main = do
-    [n, d] <- map read . words <$> getLine
-    s <- getLine
-    let result = min (d + T.count "." (T.pack s)) n
-    print result
+  [n, d] <- map read . words <$> getLine
+  s <- getLine
+  let result = min (d + T.count "." (T.pack s)) n
+  print result
 
 -- メモ
 -- {-# LANGUAGE OverloadedStrings #-}はリテラルの型をStringからTextに変更する

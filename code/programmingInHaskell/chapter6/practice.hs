@@ -5,15 +5,16 @@
 
 factorial :: Int -> Int
 factorial 0 = 1
-factorial n | n > 0     = n * factorial (n - 1)
+factorial n | n > 0 = n * factorial (n - 1)
 
 -- 2. 与えられた非負の整数から0 までを足し合わせる関数sumdown :: Int -> Int を再帰的に定義してください。
 -- たとえば、sumdown 3 は3+2+1+0 の結果6 を返します。
 
 sumdown :: Int -> Int
 sumdown 0 = 0
-sumdown n | n > 0 = n + sumdown (n - 1)
-          | otherwise = 0
+sumdown n
+  | n > 0 = n + sumdown (n - 1)
+  | otherwise = 0
 
 -- 3. 乗算演算子* の再帰を参考にして、負でない整数に対する冪乗演算子^ を定義してください。
 -- また、その定義を使って2 ^ 3 を簡約してください。
@@ -36,9 +37,10 @@ n ^ m = n * (n Main.^ (m - 1))
 -- 3
 
 euclid :: Int -> Int -> Int
-euclid n m | n == m     = n
-           | n < m      = euclid (m-n) n
-           | otherwise  = euclid m (n-m)
+euclid n m
+  | n == m = n
+  | n < m = euclid (m - n) n
+  | otherwise = euclid m (n - m)
 
 -- 5. この章で与えられた再帰的定義を使って、length [1,2,3]、drop 3 [1,2,3,4,5]、init [1,2,3] を簡約してください。
 
@@ -74,23 +76,27 @@ euclid n m | n == m     = n
 -- a リストの要素がすべてTrue であるか検査する関数
 and :: [Bool] -> Bool
 and [] = True
-and (b:bs) = b && Main.and bs
+and (b : bs) = b && Main.and bs
+
 -- b リストのリストを取り、要素であるリストを連結する関数
 concat :: [[a]] -> [a]
 concat [] = []
-concat (xs:xss) = xs ++ Main.concat xss
+concat (xs : xss) = xs ++ Main.concat xss
+
 -- c 指定された要素をn 個持つリストを生成する関数
 replicate :: Int -> a -> [a]
 replicate 0 _ = []
-replicate n x = x : Main.replicate (n-1) x
+replicate n x = x : Main.replicate (n - 1) x
+
 -- d 空でないリストのn 番めの要素を取り出す関数
 (!!) :: [a] -> Int -> a
-(x:xs) !! 0 = x
-(x:xs) !! n = xs Main.!! (n - 1)
+(x : xs) !! 0 = x
+(x : xs) !! n = xs Main.!! (n - 1)
+
 -- e リストの要素に含まれるか検査する関数
-elem :: Eq a => a -> [a] -> Bool
+elem :: (Eq a) => a -> [a] -> Bool
 elem _ [] = False
-elem a (x:xs) = a == x || Main.elem a xs
+elem a (x : xs) = a == x || Main.elem a xs
 
 -- これらの関数の多くは、プレリュードでは再帰ではなく他のプレリュード関数を用いて定義されています。
 -- また、リスト型に特化せず、より汎用的な関数になっています。
@@ -101,12 +107,13 @@ elem a (x:xs) = a == x || Main.elem a xs
 -- [1,2,3,4,5,6]
 -- 関数merge を再帰を用いて定義してください。ただし、関数insert やisortなど、整列されたリストを処理する関数は利用してはいけません。
 
-merge :: Ord a => [a] -> [a] -> [a]
+merge :: (Ord a) => [a] -> [a] -> [a]
 merge [] [] = []
 merge xs [] = xs
 merge [] ys = ys
-merge (x:xs) (y:ys) | x <= y    = x : merge xs (y:ys)
-                    | otherwise = y : merge (x:xs) ys
+merge (x : xs) (y : ys)
+  | x <= y = x : merge xs (y : ys)
+  | otherwise = y : merge (x : xs) ys
 
 -- 8. 関数merge を使って、マージソートを実行する関数msort :: Ord a => [a] -> [a] を定義してください。
 -- マージソートは、引数のリストを二つに分割し、それぞれを整列した後で再び一つに戻すことで整列を実現します。
@@ -115,9 +122,10 @@ merge (x:xs) (y:ys) | x <= y    = x : merge xs (y:ys)
 
 halve :: [a] -> ([a], [a])
 halve xs = (take n xs, drop n xs)
-  where n = length xs `div` 2
+  where
+    n = length xs `div` 2
 
-msort :: Ord a => [a] -> [a]
+msort :: (Ord a) => [a] -> [a]
 msort [] = []
 msort [x] = [x]
 msort xs = merge (msort xs') (msort ys')
@@ -139,8 +147,8 @@ msort xs = merge (msort xs') (msort ys')
 -- 1
 -- sum :: Num a => [a] -> a
 -- 2
--- sum [] = 
--- sum (x:xs) = 
+-- sum [] =
+-- sum (x:xs) =
 -- 3
 -- sum [] = 0
 -- 4
@@ -150,10 +158,10 @@ msort xs = merge (msort xs') (msort ys')
 -- 1
 -- take :: Int -> [a] -> [a]
 -- 2
--- take 0 [] = 
--- take 0 (x:xs) = 
--- take n [] = 
--- take n (x:xs) = 
+-- take 0 [] =
+-- take 0 (x:xs) =
+-- take n [] =
+-- take n (x:xs) =
 -- 3
 -- take 0 [] = []
 -- take 0 (x:xs) = []
@@ -166,9 +174,8 @@ msort xs = merge (msort xs') (msort ys')
 -- last :: [a] -> a
 -- 2
 -- last [x]
--- last (x:xs) = 
+-- last (x:xs) =
 -- 3
 -- last [x] = x
 -- 4
 -- last (x:xs) = last xs
-
