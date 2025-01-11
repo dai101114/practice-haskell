@@ -40,6 +40,10 @@ dec2int :: [Int] -> Int
 dec2int [] = 0
 dec2int ns = foldl (\acc (n, ri) -> acc + n * 10 ^ ri) 0 $ zip ns (reverse [0 .. length ns - 1])
 
+-- 別解
+dec2int :: [Int] -> Int
+dec2int = foldl (\acc x -> 10 * acc + x) 0
+
 -- 5. プレリュードの定義を見ないで以下の二つの高階関数を定義してください。
 -- a. 「引数に組を取る関数」を「カリー化された関数」へ変換する関数
 curry' :: ((a, b) -> c) -> a -> b -> c

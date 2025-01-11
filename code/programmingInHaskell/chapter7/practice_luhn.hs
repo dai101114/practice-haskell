@@ -6,6 +6,15 @@
 altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
 altMap f1 f2 xs = map ((\(x, i) -> ([f1, f2] !! (i `mod` 2)) $ x)) (zip xs [0 ..])
 
+-- 別解
+altMap' :: (a -> b) -> (a -> b) -> [a] -> [b]
+altMap' f1 f2 = zipWith ($) (cycle [f1, f2])
+
+altMap'' :: (a -> b) -> (a -> b) -> [a] -> [b]
+altMap'' _ _ [] = []
+altMap'' f1 _ [x] = [f1 x]
+altMap'' f1 f2 (x1 : x2 : xs) = f1 x1 : f2 x2 : altMap'' f1 f2 xs
+
 -- Luhn アルゴリズムは、銀行のカード番号に対して単純な入力間違いを検出する方法であり、以下のように実行されます。
 -- - それぞれを独立した番号だとみなす
 -- - 右から数えて偶数番めの数すべてを二倍にする
