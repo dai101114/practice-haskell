@@ -100,12 +100,20 @@ eval = folde id (+)
 size :: Expr -> Int
 size = folde (const 1) (+)
 
+data Maybe' a = Nothing' | Just' a
+
 -- 7. 以下のインスタンス宣言を完成させてください。
--- instance Eq a => Eq (Maybe a) where
--- ...
--- instance Eq a => Eq [a] where
--- ...
+instance (Eq a) => Eq (Maybe' a) where
+  Nothing' == Nothing' = True
+  Just' x == Just' y = x == y
+  _ == _ = False
 
--- 8. 恒等式の検査器を拡張して、命題の中で論理和（_）と同値（≡）を扱えるようにしてください。
+-- 新しい型ラッパーの定義
+newtype MyList a = MyList [a]
 
--- 9. 抽象機械を拡張して、乗算を扱えるようにしてください。
+instance (Eq a) => Eq (MyList a) where
+  (MyList []) == (MyList []) = True
+  (MyList []) == (MyList _) = False
+  (MyList _) == (MyList []) = False
+  (MyList [x]) == (MyList [y]) = x == y
+  (MyList (x : xs)) == (MyList (y : ys)) = x == y && MyList xs == MyList ys
